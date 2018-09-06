@@ -29,7 +29,7 @@ function MSBuild {
     }
 
     # So git clean call doesn't delete
-    & git add $binlog
+    & git add -f $binlog
 }
 
 function Profile {
