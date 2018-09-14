@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloForms.Android", "HelloForms\HelloForms.Android\HelloForms.Android.csproj", "{BEC166EF-B929-4E9A-80B0-9E43B038DC31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloForms", "HelloForms\HelloForms\HelloForms.csproj", "{1CF9804D-03F9-4271-8E88-4F451B45ECA4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51126EC6-C241-49AC-8465-65DCCA8653CE}
+	EndGlobalSection
+EndGlobal
