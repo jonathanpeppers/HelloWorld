@@ -1,8 +1,12 @@
-$sln = '.\HelloWorld.sln'
-$csproj = '.\HelloWorld\HelloWorld.csproj'
-$xml = '.\HelloWorld\Resources\values\Strings.xml'
+# $sln = '.\HelloWorld.sln'
+# $csproj = '.\HelloWorld\HelloWorld.csproj'
+# $xml = '.\HelloWorld\Resources\values\Strings.xml'
+# $packageName = 'HelloWorld.HelloWorld'
+$sln = '.\HelloForms.sln'
+$csproj = '.\HelloForms\HelloForms.Android\HelloForms.Android.csproj'
+$xml = '.\HelloForms\HelloForms\MainPage.xaml'
+$packageName = 'HelloForms.HelloForms'
 $adb = 'C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe'
-$packageName = 'HelloWorld.HelloWorld'
 $verbosity = 'quiet'
 
 $nuget = '.\nuget.exe'
@@ -62,8 +66,8 @@ $msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBui
 Profile -msbuild $msbuild -version '15.8'
 
 # 15.9 P2 (TODO)
-#$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\Preview\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
-#Profile -msbuild $msbuild -version '15.9'
+$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\Preview\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
+Profile -msbuild $msbuild -version '15.9'
 
 # Print summary of results
 $logs = Get-ChildItem .\*.binlog
