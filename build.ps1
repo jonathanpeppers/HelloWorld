@@ -2,8 +2,10 @@
 # $csproj = '.\HelloWorld\HelloWorld.csproj'
 $sln = '.\HelloForms.sln'
 $csproj = '.\HelloForms\HelloForms.Android\HelloForms.Android.csproj'
-$msbuild = '..\xamarin-android\bin\Debug\bin\xabuild.exe'
+$msbuild = '..\xamarin-android\bin\Release\bin\xabuild.exe'
+$configuration = 'Release'
 $verbosity = 'quiet'
+$sizessummary = '.\sizes.binlog.summary.txt'
 $sleep = 30
 
 $nuget = '.\nuget.exe'
@@ -15,7 +17,7 @@ if (!(Test-Path $nuget)) {
 function XABuild {
     param ([string] $target, [string] $binlog, [string] $extra = '')
 
-    & $msbuild $csproj /t:$target /v:$verbosity /bl:$binlog $extra
+    & $msbuild $csproj /t:$target /v:$verbosity /bl:$binlog /p:Configuration=$configuration $extra
     if (!$?) {
         exit
     }
@@ -33,6 +35,22 @@ function Profile {
     Start-Sleep -Seconds $sleep
 
     XABuild -target 'SignAndroidPackage' -binlog $binlog -extra $extra
+
+    $apk = Get-Item '.\HelloForms\HelloForms.Android\bin\Release\HelloForms.HelloForms-Signed.apk'
+    $size = $apk.Length
+    Write-Host "APK $size"
+    Add-Content $sizessummary "***********"
+    Add-Content $sizessummary "$binlog"
+    Add-Content $sizessummary "APK $size"
+
+    $dexes = Get-Item ".\HelloForms\HelloForms.Android\obj\Release\90\android\bin\*.dex"
+    foreach ($dex in $dexes) {
+        $name = $dex.Name
+        $size = $dex.Length
+        Write-Host "$name $size"
+        Add-Content $sizessummary "$name $size"
+    }
+    & git add -f $sizessummary
 }
 
 Remove-Item .\*.binlog*
@@ -41,6 +59,10 @@ Profile -binlog 'd8.binlog' -extra '/p:AndroidDexGenerator=d8'
 Profile -binlog 'd8-no-desugar.binlog' -extra '/p:AndroidDexGenerator=d8;AndroidEnableDesugar=False'
 Profile -binlog 'dx-proguard.binlog' -extra '/p:AndroidLinkTool=proguard'
 Profile -binlog 'd8-r8.binlog' -extra '/p:AndroidDexGenerator=d8;AndroidLinkTool=r8'
+Profile -binlog 'dx-multidex.binlog' -extra '/p:AndroidEnableMultiDex=True'
+Profile -binlog 'd8-multidex.binlog' -extra '/p:AndroidEnableMultiDex=True;AndroidDexGenerator=d8'
+Profile -binlog 'dx-multidex-proguard.binlog' -extra '/p:AndroidEnableMultiDex=True;AndroidLinkTool=proguard'
+Profile -binlog 'd8-multidex-r8.binlog' -extra '/p:AndroidEnableMultiDex=True;AndroidDexGenerator=d8;AndroidLinkTool=r8'
 
 # Print summary of results
 $logs = Get-ChildItem ".\*.binlog"
