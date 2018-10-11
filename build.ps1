@@ -1,13 +1,10 @@
 # $sln = '.\HelloWorld.sln'
 # $csproj = '.\HelloWorld\HelloWorld.csproj'
-# $xml = '.\HelloWorld\Resources\values\Strings.xml'
-# $packageName = 'HelloWorld.HelloWorld'
 $sln = '.\HelloForms.sln'
 $csproj = '.\HelloForms\HelloForms.Android\HelloForms.Android.csproj'
-$xml = '.\HelloForms\HelloForms\MainPage.xaml'
-$packageName = 'HelloForms.HelloForms'
-$adb = 'C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe'
+$msbuild = '..\xamarin-android\bin\Debug\bin\xabuild.exe'
 $verbosity = 'quiet'
+$sleep = 30
 
 $nuget = '.\nuget.exe'
 if (!(Test-Path $nuget)) {
@@ -15,19 +12,10 @@ if (!(Test-Path $nuget)) {
     & git add $nuget
 }
 
-function Touch {
-    param ([string] $path)
-    $date = (Get-Date)
-    $date = $date.ToUniversalTime()
-    $file = Get-Item $path
-    $file.LastAccessTimeUtc = $date
-    $file.LastWriteTimeUtc = $date
-}
+function XABuild {
+    param ([string] $target, [string] $binlog, [string] $extra = '')
 
-function MSBuild {
-    param ([string] $msbuild, [string] $target, [string] $binlog)
-
-    & $msbuild $csproj /t:$target /v:$verbosity /bl:$binlog
+    & $msbuild $csproj /t:$target /v:$verbosity /bl:$binlog $extra
     if (!$?) {
         exit
     }
@@ -37,41 +25,27 @@ function MSBuild {
 }
 
 function Profile {
-    param ([string] $msbuild, [string] $version)
+    param ([string] $binlog, [string] $extra = '')
     
-    # Reset working copy & device
-    & $adb uninstall $packageName
+    # Reset working copy
     & git clean -dxf
     & $nuget restore $sln
+    Start-Sleep -Seconds $sleep
 
-    # First
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./first-build-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./first-package-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./first-install-$version.binlog"
-
-    # Second
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./second-build-$version.binlog" 
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./second-package-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./second-install-$version.binlog"
-
-    # Third (Touch xml)
-    Touch $xml
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./third-build-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./third-package-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./third-install-$version.binlog"
+    XABuild -target 'SignAndroidPackage' -binlog $binlog -extra $extra
 }
 
-# 15.8.2
-$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
-Profile -msbuild $msbuild -version '15.8'
-
-# 15.9 P2 (TODO)
-$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\Preview\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
-Profile -msbuild $msbuild -version '15.9'
+Remove-Item .\*.binlog*
+Profile -binlog 'dx.binlog'
+Profile -binlog 'd8.binlog' -extra '/p:AndroidDexGenerator=d8'
+Profile -binlog 'd8-no-desugar.binlog' -extra '/p:AndroidDexGenerator=d8;AndroidEnableDesugar=False'
+Profile -binlog 'dx-proguard.binlog' -extra '/p:AndroidLinkTool=proguard'
+Profile -binlog 'd8-r8.binlog' -extra '/p:AndroidDexGenerator=d8;AndroidLinkTool=r8'
 
 # Print summary of results
-$logs = Get-ChildItem .\*.binlog
+$logs = Get-ChildItem ".\*.binlog"
 foreach ($log in $logs) {
-    $time = & $msbuild $log | Select-Object -Last 1
+    $time = & msbuild $log | Select-Object -Last 1
     Write-Host "$log $time"
+    & msbuild /clp:performancesummary $log > "$log.summary.txt"
 }
