@@ -1,5 +1,6 @@
 $sln = '.\HelloForms.sln'
 $verbosity = 'quiet'
+$sleep = 10
 
 $nuget = '.\nuget.exe'
 if (!(Test-Path $nuget)) {
@@ -33,9 +34,14 @@ function Profile {
     
     & git clean -dxf
     & $nuget restore $sln
+    Start-Sleep -Seconds $sleep
 
     MSBuild -msbuild $msbuild -binlog ".\dtb-$version.binlog"
 }
+
+# 15.7
+$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe'
+Profile -msbuild $msbuild -version '15.7'
 
 # 15.8
 $msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
