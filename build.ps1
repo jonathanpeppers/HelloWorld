@@ -1,12 +1,4 @@
-# $sln = '.\HelloWorld.sln'
-# $csproj = '.\HelloWorld\HelloWorld.csproj'
-# $xml = '.\HelloWorld\Resources\values\Strings.xml'
-# $packageName = 'HelloWorld.HelloWorld'
 $sln = '.\HelloForms.sln'
-$csproj = '.\HelloForms\HelloForms.Android\HelloForms.Android.csproj'
-$xml = '.\HelloForms\HelloForms\MainPage.xaml'
-$packageName = 'HelloForms.HelloForms'
-$adb = 'C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe'
 $verbosity = 'quiet'
 
 $nuget = '.\nuget.exe'
@@ -25,9 +17,9 @@ function Touch {
 }
 
 function MSBuild {
-    param ([string] $msbuild, [string] $target, [string] $binlog)
+    param ([string] $msbuild, [string] $binlog)
 
-    & $msbuild $csproj /t:$target /v:$verbosity /bl:$binlog
+    & $msbuild $sln /t:CompileDesignTime /v:$verbosity /bl:$binlog /p:DesignTimeBuild=True /p:BuildingInsideVisualStudio=True /p:SkipCompilerExecution=True /p:ProvideCommandLineArgs=True
     if (!$?) {
         exit
     }
@@ -39,35 +31,15 @@ function MSBuild {
 function Profile {
     param ([string] $msbuild, [string] $version)
     
-    # Reset working copy & device
-    & $adb uninstall $packageName
     & git clean -dxf
     & $nuget restore $sln
 
-    # First
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./first-build-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./first-package-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./first-install-$version.binlog"
-
-    # Second
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./second-build-$version.binlog" 
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./second-package-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./second-install-$version.binlog"
-
-    # Third (Touch xml)
-    Touch $xml
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./third-build-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./third-package-$version.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./third-install-$version.binlog"
+    MSBuild -msbuild $msbuild -binlog ".\dtb-$version.binlog"
 }
 
-# 15.8.2
+# 15.8
 $msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
 Profile -msbuild $msbuild -version '15.8'
-
-# 15.9 P2 (TODO)
-$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\Preview\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
-Profile -msbuild $msbuild -version '15.9'
 
 # Print summary of results
 $logs = Get-ChildItem .\*.binlog
