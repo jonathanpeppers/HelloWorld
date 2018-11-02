@@ -20,7 +20,7 @@ function Touch {
 function MSBuild {
     param ([string] $msbuild, [string] $binlog)
 
-    & $msbuild $sln /t:CompileDesignTime /v:$verbosity /bl:$binlog /p:DesignTimeBuild=True /p:BuildingInsideVisualStudio=True /p:SkipCompilerExecution=True /p:ProvideCommandLineArgs=True
+    & $msbuild $sln /t:Compile /v:$verbosity /bl:$binlog /p:DesignTimeBuild=True /p:BuildingInsideVisualStudio=True /p:SkipCompilerExecution=True /p:ProvideCommandLineArgs=True
     if (!$?) {
         exit
     }
