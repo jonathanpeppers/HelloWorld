@@ -43,9 +43,13 @@ function Profile {
 $msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe'
 Profile -msbuild $msbuild -version '15.7'
 
-# 15.8
+# 15.9
 $msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
-Profile -msbuild $msbuild -version '15.8'
+Profile -msbuild $msbuild -version '15.9'
+
+# 16.0
+$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\MSBuild.exe'
+Profile -msbuild $msbuild -version '16.0'
 
 # Print summary of results
 $logs = Get-ChildItem .\*.binlog
