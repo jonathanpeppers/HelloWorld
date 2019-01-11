@@ -1,14 +1,8 @@
-# $sln = '.\HelloWorld.sln'
-# $csproj = '.\HelloWorld\HelloWorld.csproj'
-# $xml = '.\HelloWorld\Resources\values\Strings.xml'
-# $packageName = 'HelloWorld.HelloWorld'
 $sln = '.\HelloForms.sln'
 $csproj = '.\HelloForms\HelloForms.Android\HelloForms.Android.csproj'
-$xml = '.\HelloForms\HelloForms\MainPage.xaml'
 $packageName = 'HelloForms.HelloForms'
 $adb = 'C:\Program Files (x86)\Android\android-sdk\platform-tools\adb.exe'
 $verbosity = 'quiet'
-$java = '/p:JavaSdkDirectory=C:\Program Files (x86)\Java\jdk1.8.0_161'
 $suffix = ''
 
 $nuget = '.\nuget.exe'
@@ -17,19 +11,10 @@ if (!(Test-Path $nuget)) {
     & git add $nuget
 }
 
-function Touch {
-    param ([string] $path)
-    $date = (Get-Date)
-    $date = $date.ToUniversalTime()
-    $file = Get-Item $path
-    $file.LastAccessTimeUtc = $date
-    $file.LastWriteTimeUtc = $date
-}
-
 function MSBuild {
     param ([string] $msbuild, [string] $target, [string] $binlog)
 
-    & $msbuild $csproj /t:$target /v:$verbosity /bl:$binlog $java
+    & $msbuild $csproj /t:$target /v:$verbosity /bl:$binlog
     if (!$?) {
         exit
     }
@@ -47,25 +32,15 @@ function Profile {
     & $nuget restore $sln
 
     # First
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./first-build-$version$suffix.binlog"
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./first-package-$version$suffix.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./first-install-$version$suffix.binlog"
+    MSBuild -msbuild $msbuild -target 'Install' -binlog "./first-$version$suffix.binlog"
 
     # Second
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./second-build-$version$suffix.binlog" 
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./second-package-$version$suffix.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./second-install-$version$suffix.binlog"
-
-    # Third (Touch xml)
-    Touch $xml
-    MSBuild -msbuild $msbuild -target 'Build' -binlog "./third-build-$version$suffix.binlog"
-    MSBuild -msbuild $msbuild -target 'SignAndroidPackage' -binlog "./third-package-$version$suffix.binlog"
-    MSBuild -msbuild $msbuild -target 'Install' -binlog "./third-install-$version$suffix.binlog"
+    MSBuild -msbuild $msbuild -target 'Install' -binlog "./second-$version$suffix.binlog"
 }
 
-# 15.8.2
-#$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
-#Profile -msbuild $msbuild -version '15.8'
+# 15.9.5
+$msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
+Profile -msbuild $msbuild -version '15.9'
 
 # 16.0 P2
 $msbuild = 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\MSBuild.exe'
