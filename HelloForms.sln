@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloForms.Android", "HelloForms\HelloForms.Android\HelloForms.Android.csproj", "{BEC166EF-B929-4E9A-80B0-9E43B038DC31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloForms", "HelloForms\HelloForms\HelloForms.csproj", "{1CF9804D-03F9-4271-8E88-4F451B45ECA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloForms", "HelloForms\HelloForms\HelloForms.csproj", "{1CF9804D-03F9-4271-8E88-4F451B45ECA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloForms.Console", "HelloForms.Console\HelloForms.Console.csproj", "{987CE8FE-9768-4463-BDBC-7DF552CDE475}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEC166EF-B929-4E9A-80B0-9E43B038DC31}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CF9804D-03F9-4271-8E88-4F451B45ECA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{987CE8FE-9768-4463-BDBC-7DF552CDE475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{987CE8FE-9768-4463-BDBC-7DF552CDE475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{987CE8FE-9768-4463-BDBC-7DF552CDE475}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{987CE8FE-9768-4463-BDBC-7DF552CDE475}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
