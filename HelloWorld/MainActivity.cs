@@ -15,6 +15,9 @@ namespace HelloWorld
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+			//Just to reference it
+			var foo = new HugeClassLibrary.Class1 ();
+
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
